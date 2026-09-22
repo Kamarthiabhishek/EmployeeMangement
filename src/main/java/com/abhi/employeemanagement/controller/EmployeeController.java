@@ -37,4 +37,8 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.deleteEmployee(id));
     }
 
+    @PatchMapping("update/{id}")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(employeeService.updateEmployee(id));
+    }
 }

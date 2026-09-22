@@ -1,11 +1,10 @@
-package com.abhi.employeemanagement.entity.dto;
+package com.abhi.employeemanagement.entity;
 
-import com.abhi.employeemanagement.entity.dto.enums.EmployeeStatus;
+import com.abhi.employeemanagement.entity.enums.EmployeeStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -51,4 +50,22 @@ public class Employee {
 
     @Column(nullable = false)
     private LocalDateTime updatedDate;
+
+    public Employee(String firstName, String lastName, String email, Long phoneNumber, String department, String designation, Double salary, LocalDate joiningDate, EmployeeStatus status, LocalDateTime createdDate, LocalDateTime updatedDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.department = department;
+        this.designation = designation;
+        this.salary = salary;
+        this.joiningDate = joiningDate;
+        this.status = status;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
+
+    public Employee() {
+
+    }
 }

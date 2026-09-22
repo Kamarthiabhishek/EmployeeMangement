@@ -79,10 +79,35 @@ public class EmployeeService {
     }
 
     public String deleteEmployee(Integer id){
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeDoesntExists("Employee Doesn't Exists for ID : "+id));
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() ->
+                        new EmployeeDoesntExists(
+                                "Employee Doesn't Exists for ID : " + id
+                        )
+                );
         employee.setStatus(EmployeeStatus.REMOVED);
         employee.setUpdatedDate(LocalDateTime.now());
+
         Employee savedEmployee = employeeRepository.save(employee);
-        return "Employee Successfully deleted for ID : "+id;
+        EmployeeEvent event = new EmployeeEvent(
+                savedEmployee.getId(),
+                savedEmployee.getFirstName(),
+                "EMPLOYEE_DELETED"
+        );
+        kafkaProducer.sendEmployeeDeleted(event);
+        return "Employee Successfully deleted for ID : " + id;
+    }
+    public EmployeeResponse updateEmployee(Integer id){
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeDoesntExists("Employee doesn't exists with ID : "+id));
+        employee.setStatus(EmployeeStatus.ON_LEAVE);
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        EmployeeEvent event = new EmployeeEvent(
+                savedEmployee.getId(),
+                savedEmployee.getFirstName(),
+                "EMPLOYEE_UPDATED"
+        );
+        kafkaProducer.sendEmployeeUpdated(event);
+        return buildEmployeeResponse(savedEmployee);
     }
 }

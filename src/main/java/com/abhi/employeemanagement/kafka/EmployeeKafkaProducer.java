@@ -14,4 +14,12 @@ public class EmployeeKafkaProducer {
     public void sendEmployeeCreated(EmployeeEvent employeeEvent){
         kafkaTemplate.send("employee-events",employeeEvent.employeeId().toString(), employeeEvent);
     }
+
+    public void sendEmployeeUpdated(EmployeeEvent event){
+        kafkaTemplate.send("employee-events",event.employeeId().toString(), event);
+    }
+
+    public void sendEmployeeDeleted(EmployeeEvent event){
+        kafkaTemplate.send("employee-events", event.employeeId().toString(), event);
+    }
 }
